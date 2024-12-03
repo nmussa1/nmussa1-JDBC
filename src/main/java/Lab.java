@@ -38,13 +38,34 @@ public class Lab {
 
     public void createSong(Song song)  {
         //write jdbc code here
-    }
+        try{
+            Connection connection = ConnectionUtil.getConnection();
+            String sql = "insert into songs(title, artist) values ('" + song.gettitle() + "', '" + song.getArtist() + "');";  
+        Statement statement = connection.createStatement();
 
+        //execute the statement to db
+        statement.executeUpdate(sql);
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    }
     public List<Song> getAllSongs(){
         List<Song> songs = new ArrayList<>();
 
         //write jdbc code here
+        try{
+            Connection connection = ConnectionUtil.getConnection();
+            String sql = "select * from songs;";  
+        Statement statement = connection.createStatement();
+        ResultSet rs = statement.executeQuery(sql);
 
+        while(rs.next()){
+            songs.add(new Song(rs.getInt("id"), rs.getString("title"), rs.getString("artist")));
+
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
         return songs;
     }
 }
